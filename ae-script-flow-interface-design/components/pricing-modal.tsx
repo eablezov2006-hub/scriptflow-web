@@ -15,10 +15,12 @@ type Tier = {
   features: string[]
   icon: typeof Zap
   highlight?: boolean
-}
+  href: string
+ }
+
 
 const TIERS: Tier[] = [
-  {
+    {
     id: 'monthly',
     name: 'Pro Monthly',
     price: '$9',
@@ -26,6 +28,7 @@ const TIERS: Tier[] = [
     description: 'For motion designers shipping every week.',
     icon: Zap,
     features: ['Unlimited expressions', 'All property types', 'Priority response'],
+    href: 'https://scriptflow.lemonsqueezy.com/checkout/buy/36ecd266-2470-4ad5-9eab-0221686dfd3a',
   },
   {
     id: 'lifetime',
@@ -40,6 +43,7 @@ const TIERS: Tier[] = [
       'Free future updates',
       'Early access to the native AE plugin (.zxp)',
     ],
+    href: 'https://scriptflow.lemonsqueezy.com/checkout/buy/bd703649-2537-42a8-97e4-a4811127777e',
   },
 ]
 
@@ -118,19 +122,18 @@ export function PricingModal({
                   ))}
                 </ul>
 
-                     <a
-            href="https://scriptflow.lemonsqueezy.com/checkout/buy/bd703649-2537-42a8-97e4-a4811127777e"
-            target="_blank"
+                              <a
+            href={tier.href}
             rel="noopener noreferrer"
             className={cn(
               'inline-flex items-center justify-center gap-2 mt-6 h-11 w-full rounded-xl font-semibold',
               tier.highlight
                 ? 'bg-gradient-to-r from-primary to-cyan text-primary-foreground hover:opacity-90'
-                : 'bg-secondary text-foreground hover:bg-secondary/70',
+                : 'bg-secondary text-foreground hover:bg-secondary/70'
             )}
           >
-            <Crown aria-hidden="true" />
-            Get Lifetime Access
+            {tier.highlight && <Crown aria-hidden="true" />}
+            {tier.id === 'monthly' ? 'Get Monthly Access' : 'Get Lifetime Access'}
           </a>
         </div>
       )
