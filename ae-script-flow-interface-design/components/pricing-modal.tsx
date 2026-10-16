@@ -121,14 +121,11 @@ export function PricingModal({
                     </li>
                   ))}
                 </ul>
-
-                           <a
+          <a
             href={tier.href}
-            onClick={() => {
-              window.location.href = tier.href
-            }}
+            target="_blank"
             rel="noopener noreferrer"
-            className={cn(             
+            className={cn(
               'inline-flex items-center justify-center gap-2 mt-6 h-11 w-full rounded-xl font-semibold',
               tier.highlight
                 ? 'bg-gradient-to-r from-primary to-cyan text-primary-foreground hover:opacity-90'
