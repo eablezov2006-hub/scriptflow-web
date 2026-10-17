@@ -22,16 +22,15 @@ export function SiteHeader() {
           <Button variant="ghost" size="lg" className="hidden px-3 text-muted-foreground sm:inline-flex">
             Sign In
           </Button>
-        <a
-  href="https://scriptflow.lemonsqueezy.com/checkout/buy/bd703649-2537-42a8-97e4-a4811127777e"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-cyan px-3.5 py-2 font-semibold text-white hover:opacity-90"
->
-  <Crown aria-hidden="true" />
-  <span className="sm:hidden">Pro</span>
-  <span className="hidden sm:inline">Upgrade to Pro</span>
-</a>
+                  <button
+            type="button"
+            onClick={openPricing}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-cyan px-3.5 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
+          >
+            <Crown aria-hidden="true" />
+            <span className="sm:hidden">Pro</span>
+            <span className="hidden sm:inline">Upgrade to Pro</span>
+          </button>
         </nav>
       </div>
     </header>
