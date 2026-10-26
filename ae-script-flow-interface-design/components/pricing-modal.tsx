@@ -18,22 +18,11 @@ type Tier = {
   href: string
  }
 
-
 const TIERS: Tier[] = [
-    {
-    id: 'monthly',
-    name: 'Pro Monthly',
-    price: '$9',
-    cadence: '/month',
-    description: 'For motion designers shipping every week.',
-    icon: Zap,
-    features: ['Unlimited expressions', 'All property types', 'Priority response'],
-    href: 'https://scriptflow.lemonsqueezy.com/checkout/buy/36ecd266-2470-4ad5-9eab-0221686dfd3a',
-  },
   {
     id: 'lifetime',
-    name: 'Lifetime Pass',
-    price: '$29',
+    name: 'Lifetime Pass (Early Bird)',
+    price: '$14',
     cadence: 'one-time',
     description: 'Pay once, keep ScriptFlow forever.',
     icon: InfinityIcon,
