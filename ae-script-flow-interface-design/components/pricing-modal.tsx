@@ -129,25 +129,91 @@ export function PricingModal({
     })}
   </div>
 
-        <div className="border-t border-border px-6 py-4 text-center text-xs text-muted-foreground flex flex-col items-center gap-2">
-        <p>Secure checkout · One-time payment · Lifetime access</p>
-        <button
-          type="button"
-          onClick={() => {
-            const code = window.prompt('Enter your lifetime access code:')
-            if (code && code.trim().toUpperCase() === 'FLOW2026') {
-              window.localStorage.setItem('ae-scriptflow:pro-unlocked', 'true')
-              alert('🎉 Lifetime Pass activated! Unlimited generations unlocked.')
-              window.location.reload()
-            } else if (code) {
-              alert('Invalid code. Please check your purchase receipt.')
-            }
-          }}
-          className="underline hover:text-foreground transition-colors cursor-pointer"
-        >
-          Already purchased? Redeem code
-        </button>
-      </div>
+       {/* Контейнер из двух колонок: Слева покупка, Справа активация */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+          
+          {/* Левая колонка: Тариф $14 */}
+          <div className="relative rounded-2xl border border-primary/40 bg-gradient-to-b from-primary/10 to-background/50 p-6 flex flex-col justify-between">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-cyan-400 px-3 py-0.5 text-xs font-semibold text-slate-950">
+              Best Value
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 text-sm text-cyan-400 font-medium">
+                <span>∞</span> Lifetime Pass (Early Bird)
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-4xl font-extrabold text-foreground">$14</span>
+                <span className="text-sm text-muted-foreground">one-time</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Pay once, keep ScriptFlow forever.
+              </p>
+
+              <ul className="mt-5 space-y-2.5 text-xs text-foreground/90">
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span> Lifetime unlimited access
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span> Free future updates
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-cyan-400">✓</span> Early access to native AE plugin (.zxp)
+                </li>
+              </ul>
+            </div>
+
+            <a
+              href="https://scriptflow.lemonsqueezy.com/buy/0f438a0f-6238-4f81-a3f1-e37453d71954"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] hover:opacity-95 text-sm"
+            >
+              👑 Get Lifetime Access
+            </a>
+          </div>
+
+          {/* Правая колонка: Яркий блок активации кода */}
+          <div className="relative rounded-2xl border border-cyan-500/40 bg-gradient-to-b from-cyan-950/20 via-background/60 to-background/80 p-6 flex flex-col justify-between shadow-[0_0_25px_rgba(6,182,212,0.15)]">
+            <div>
+              <div className="flex items-center gap-2 text-sm text-cyan-300 font-medium">
+                <span>⚡️</span> Instant Activation
+              </div>
+
+              <h4 className="mt-3 text-lg font-bold text-foreground">
+                Already purchased?
+              </h4>
+
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                Enter the activation code from your purchase receipt to unlock unlimited access right now.
+              </p>
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  const code = window.prompt('Enter your lifetime access code:')
+                  if (code && code.trim().toUpperCase() === 'FLOW2026') {
+                    window.localStorage.setItem('ae-scriptflow:pro-unlocked', 'true')
+                    alert('🎉 Lifetime Pass activated! Unlimited generations unlocked.')
+                    window.location.reload()
+                  } else if (code) {
+                    alert('Invalid code. Please check your purchase receipt.')
+                  }
+                }}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-semibold text-sm transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:scale-[1.02] cursor-pointer"
+              >
+                🔑 Redeem Access Code
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Простой и чистый футер внизу */}
+        <div className="border-t border-border px-6 py-3 text-center text-xs text-muted-foreground">
+          <p>Secure checkout · One-time payment · Lifetime access</p>
+        </div>
     </DialogContent>
   </Dialog>
   )
