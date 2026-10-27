@@ -129,10 +129,22 @@ export function PricingModal({
     })}
   </div>
 
-  <p className="border-t border-border px-6 py-4 text-center text-xs text-muted-foreground">
-    Secure checkout · One-time payment · Lifetime access
-  </p>
-</DialogContent>
-    </Dialog>
-  )
-}
+  <div className="border-t border-border px-6 py-4 text-center text-xs text-muted-foreground flex flex-col items-center gap-2">
+  <p>Secure checkout · One-time payment · Lifetime access</p>
+  <button
+    type="button"
+    onClick={() => {
+      const code = window.prompt('Enter your lifetime access code:')
+      if (code && code.trim().toUpperCase() === 'FLOW2026') {
+        window.localStorage.setItem('ae-scriptflow:pro-unlocked', 'true')
+        alert('🎉 Lifetime Pass activated! Unlimited generations unlocked.')
+        window.location.reload()
+      } else if (code) {
+        alert('Invalid code. Please check your purchase receipt.')
+      }
+    }}
+    className="underline hover:text-foreground transition-colors cursor-pointer"
+  >
+    Already purchased? Redeem code
+  </button>
+</div>
