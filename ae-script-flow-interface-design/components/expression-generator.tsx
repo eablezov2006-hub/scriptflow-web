@@ -133,24 +133,23 @@ export function ExpressionGenerator() {
         </div>
 
         {limitReached && !isLoading ? (
-          <div className="mt-3 flex flex-col gap-2">
-            <Button
-              type="button"
-              disabled
-              className="h-12 w-full rounded-xl bg-secondary text-[15px] font-semibold text-muted-foreground"
-            >
-              <Lock className="size-5" aria-hidden="true" />
-              {'Limit Reached \u2014 Upgrade to Pro'}
-            </Button>
-            <button
-              type="button"
-              onClick={() => openPricing('limit')}
-              className="inline-flex items-center justify-center gap-1.5 text-xs font-medium text-primary hover:text-cyan"
-            >
-              <Crown className="size-3.5" aria-hidden="true" />
-              View Pro plans
-            </button>
-          </div>
+         <div className="mt-3 flex flex-col gap-2">
+          <Button
+            type="button"
+            onClick={() => openPricing('limit')}
+            className="h-12 w-full rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-[15px] font-semibold text-white shadow-lg shadow-purple-500/25 hover:opacity-95 hover:shadow-purple-500/40 transition-all"
+          >
+            <Lock className="size-5" aria-hidden="true" />
+            {'Limit Reached \u2014 Upgrade to Pro'}
+          </Button>
+          <button
+            type="button"
+            onClick={() => openPricing('limit')}
+            className="inline-flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-white transition-colors"
+          >
+            🔑 Already purchased? <span className="underline decoration-muted-foreground/60 underline-offset-4">Redeem Access Code</span>
+          </button>
+        </div>
         ) : (
           <Button
             type="submit"
