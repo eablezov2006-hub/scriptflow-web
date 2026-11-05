@@ -32,7 +32,7 @@ const TIERS: Tier[] = [
       'Free future updates',
       'Early access to the native AE plugin (.zxp)',
     ],
-    href: 'https://buy.polar.sh/polar_cl_yGFGnc8WoU95OFg16yfthXgbt3NDoXEBbA8Fz3Gp4In',
+    href: 'https://ernesstudio.gumroad.com/l/xbydw',
   },
 ]
 
