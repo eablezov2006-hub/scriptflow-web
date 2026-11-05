@@ -22,15 +22,16 @@ export function SiteHeader() {
           <Button variant="ghost" size="lg" className="hidden px-3 text-muted-foreground sm:inline-flex">
             Sign In
           </Button>
-                  <button
-            type="button"
-            onClick={openPricing}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-cyan px-3.5 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
-          >
-            <Crown aria-hidden="true" />
-            <span className="sm:hidden">Pro</span>
-            <span className="hidden sm:inline">Upgrade to Pro</span>
-          </button>
+                 <a
+  href="https://ernesstudio.gumroad.com/l/xbydw"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary to-cyan px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
+>
+  <Crown aria-hidden="true" className="w-4 h-4" />
+  <span className="sm:hidden">Pro</span>
+  <span className="hidden sm:inline">Upgrade to Pro</span>
+</a>
         </nav>
       </div>
     </header>
