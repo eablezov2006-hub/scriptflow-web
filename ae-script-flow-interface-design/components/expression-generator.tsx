@@ -19,10 +19,13 @@ export function ExpressionGenerator() {
   const [isLoading, setIsLoading] = useState(false)
   const [activePreset, setActivePreset] = useState<string | null>(null)
   const [isMac, setIsMac] = useState(false)
+  const { remaining, limit, consume } = useFreeGenerations()
+  const { openPricing } = usePricing()
+  const limitReached = remaining <= 0
 
-useEffect(() => {
-  setIsMac(navigator.platform.toUpperCase().includes('MAC'))
-}, [])
+  useEffect(() => {
+    setIsMac(navigator.platform.toUpperCase().includes('MAC'))
+  }, [])
 
   async function generate() {
     if (limitReached) {
