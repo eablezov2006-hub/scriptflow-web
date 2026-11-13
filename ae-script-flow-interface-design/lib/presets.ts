@@ -4,7 +4,7 @@ export type Expression = {
   summary: string
 }
 
-export const PRESETS = [
+export const PRESETS = [ 
   {
     label: 'Elastic Bounce',
     prompt: 'Make the layer scale up with an elastic bounce when it appears, overshooting and settling with decay.',
