@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Crown, Lock, Loader2, MousePointerClick, Sparkles, Target, Timer } from 'lucide-react'
 import { useFreeGenerations } from '@/hooks/use-free-generations'
 import { usePricing } from '@/components/pricing-provider'
@@ -18,9 +18,11 @@ export function ExpressionGenerator() {
   const [isSample, setIsSample] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [activePreset, setActivePreset] = useState<string | null>(null)
-  const { remaining, limit, consume } = useFreeGenerations()
-  const { openPricing } = usePricing()
-  const limitReached = remaining <= 0
+  const [isMac, setIsMac] = useState(false)
+
+useEffect(() => {
+  setIsMac(navigator.platform.toUpperCase().includes('MAC'))
+}, [])
 
   async function generate() {
     if (limitReached) {
@@ -165,7 +167,7 @@ export function ExpressionGenerator() {
           </Button>
         )}
         <p className="mt-2.5 text-center text-xs text-muted-foreground">
-          Press <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px]">Ctrl</kbd>{' '}
+          Press <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px]">{isMac ? 'Cmd' : 'Ctrl'}</kbd>{' '}
           + <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px]">Enter</kbd> to
           generate
         </p>
