@@ -25,6 +25,22 @@ export const PRESETS = [
     label: 'Auto Fade',
     prompt: 'Automatically fade the layer in over 0.5 seconds at its in point and fade out before its out point.',
   },
+  {
+    label: 'Typewriter',
+    prompt: 'Reveal text character by character like a typewriter with a blinking cursor at the end.',
+  },
+  {
+    label: 'Inertial Overshoot',
+    prompt: 'Add a smooth inertial overshoot bounce to existing keyframes without harsh vibration.',
+  },
+  {
+    label: 'Constant Rotation',
+    prompt: 'Rotate the layer continuously at 90 degrees per second without any keyframes.',
+  },
+  {
+    label: 'Marker Trigger',
+    prompt: 'Trigger a smooth 0.5 second scale pop animation every time a layer marker is reached.',
+  },
 ] as const
 
 export const SAMPLE_EXPRESSION: Expression = {
