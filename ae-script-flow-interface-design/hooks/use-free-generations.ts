@@ -2,19 +2,12 @@
 
 import { useCallback, useSyncExternalStore } from 'react'
 
-export const FREE_GENERATION_LIMIT = 3
+export const FREE_GENERATION_LIMIT = 5
 const STORAGE_KEY = 'ae-scriptflow:generations-used'
 const PRO_KEY = 'ae-scriptflow:pro-unlocked'
 const SECRET_CODE = 'FLOW2026' // Секретный код для покупателей
-const DATE_KEY = 'ae-scriptflow:generations-date'
 
-function getTodayKey(): string {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const day = String(now.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}const listeners = new Set<() => void>()
+const listeners = new Set<() => void>()
 
 function isProUser(): boolean {
   if (typeof window === 'undefined') return false
@@ -24,14 +17,6 @@ function isProUser(): boolean {
 function readUsed() {
   if (typeof window === 'undefined') return 0
   if (isProUser()) return 0
-
-  const savedDate = window.localStorage.getItem(DATE_KEY)
-  const today = getTodayKey()
-
-  // Если наступил новый день — сбрасываем счетчик в 0
-  if (savedDate !== today) {
-    return 0
-  }
 
   const value = Number(window.localStorage.getItem(STORAGE_KEY))
   return Number.isFinite(value) ? Math.min(Math.max(value, 0), FREE_GENERATION_LIMIT) : 0
@@ -57,13 +42,13 @@ export function useFreeGenerations() {
   const remaining = isPro ? 999999 : FREE_GENERATION_LIMIT - used
 
   const consume = useCallback(() => {
-  if (isProUser()) return 999999
-  const next = Math.min(readUsed() + 1, FREE_GENERATION_LIMIT)
-  window.localStorage.setItem(STORAGE_KEY, String(next))
-  window.localStorage.setItem(DATE_KEY, getTodayKey())
-  listeners.forEach((listener) => listener())
-  return FREE_GENERATION_LIMIT - next
-}, [])
+    if (isProUser()) return 999999
+    const next = Math.min(readUsed() + 1, FREE_GENERATION_LIMIT)
+    window.localStorage.setItem(STORAGE_KEY, String(next))
+    window.localStorage.removeItem('ae-scriptflow:generations-date')
+    listeners.forEach((listener) => listener())
+    return FREE_GENERATION_LIMIT - next
+  }, [])
 
   const unlockPro = useCallback((code: string) => {
     if (code.trim().toUpperCase() === SECRET_CODE) {
