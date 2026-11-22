@@ -29,6 +29,7 @@ const TIERS: Tier[] = [
     highlight: true,
     features: [
       'Lifetime unlimited access',
+      '1-click .jsx scripts with Slider Controls',
       'Free future updates',
       'Early access to the native AE plugin (.zxp)',
     ],
