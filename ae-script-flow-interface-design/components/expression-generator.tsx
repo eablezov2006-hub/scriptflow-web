@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Crown, Lock, Loader2, MousePointerClick, Sparkles, Target, Timer } from 'lucide-react'
+import { Lock, Loader2, MousePointerClick, Sparkles, Target, Timer } from 'lucide-react'
 import { useFreeGenerations } from '@/hooks/use-free-generations'
 import { usePricing } from '@/components/pricing-provider'
 import { Button } from '@/components/ui/button'
 import { CodeBlock } from '@/components/code-block'
 import { PRESETS, SAMPLE_EXPRESSION, type Expression } from '@/lib/presets'
 import { generateMockExpression } from '@/lib/mock-generator'
+import { buildAfterEffectsJsx } from '@/lib/jsx-builder'
 import { cn } from '@/lib/utils'
 
 const MAX_LENGTH = 1000
@@ -19,7 +20,7 @@ export function ExpressionGenerator() {
   const [isLoading, setIsLoading] = useState(false)
   const [activePreset, setActivePreset] = useState<string | null>(null)
   const [isMac, setIsMac] = useState(false)
-  const { remaining, limit, consume } = useFreeGenerations()
+  const { remaining, limit, consume, isPro } = useFreeGenerations()
   const { openPricing } = usePricing()
   const limitReached = remaining <= 0
 
@@ -40,6 +41,24 @@ export function ExpressionGenerator() {
     setIsSample(false)
     setIsLoading(false)
     if (left <= 0) openPricing('limit')
+  }
+
+  function handleDownloadJsx() {
+    if (!isPro) {
+      openPricing('upgrade')
+      return
+    }
+    const jsxContent = buildAfterEffectsJsx(result)
+    const blob = new Blob([jsxContent], { type: 'application/javascript;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const slug = result.property.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `scriptflow-${slug}.jsx`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -121,40 +140,42 @@ export function ExpressionGenerator() {
               )}
               aria-live="polite"
             >
-              {remaining}/{limit}
+              {isPro ? 'Unlimited' : `${remaining}/${limit}`}
             </span>
           </div>
-          <div className="flex gap-1" aria-hidden="true">
-            {Array.from({ length: limit }).map((_, i) => (
-              <span
-                key={i}
-                className={cn(
-                  'h-1.5 w-5 rounded-full transition-colors duration-500',
-                  i < remaining ? 'bg-gradient-to-r from-primary to-cyan' : 'bg-secondary',
-                )}
-              />
-            ))}
-          </div>
+          {!isPro && (
+            <div className="flex gap-1" aria-hidden="true">
+              {Array.from({ length: limit }).map((_, i) => (
+                <span
+                  key={i}
+                  className={cn(
+                    'h-1.5 w-4 rounded-full transition-colors duration-500',
+                    i < remaining ? 'bg-gradient-to-r from-primary to-cyan' : 'bg-secondary',
+                  )}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {limitReached && !isLoading ? (
-         <div className="mt-3 flex flex-col gap-2">
-          <Button
-            type="button"
-            onClick={() => openPricing('limit')}
-            className="h-12 w-full rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-[15px] font-semibold text-white shadow-lg shadow-purple-500/25 hover:opacity-95 hover:shadow-purple-500/40 transition-all"
-          >
-            <Lock className="size-5" aria-hidden="true" />
-            {'Limit Reached \u2014 Upgrade to Pro'}
-          </Button>
-          <button
-            type="button"
-            onClick={() => openPricing('limit')}
-            className="inline-flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-white transition-colors"
-          >
-            🔑 Already purchased? <span className="underline decoration-muted-foreground/60 underline-offset-4">Redeem Access Code</span>
-          </button>
-        </div>
+          <div className="mt-3 flex flex-col gap-2">
+            <Button
+              type="button"
+              onClick={() => openPricing('limit')}
+              className="h-12 w-full rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-[15px] font-semibold text-white shadow-lg shadow-purple-500/25 hover:opacity-95 hover:shadow-purple-500/40 transition-all"
+            >
+              <Lock className="size-5" aria-hidden="true" />
+              {'Limit Reached \u2014 Upgrade to Pro'}
+            </Button>
+            <button
+              type="button"
+              onClick={() => openPricing('limit')}
+              className="inline-flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-white transition-colors"
+            >
+              🔑 Already purchased? <span className="underline decoration-muted-foreground/60 underline-offset-4">Redeem Access Code</span>
+            </button>
+          </div>
         ) : (
           <Button
             type="submit"
@@ -196,6 +217,8 @@ export function ExpressionGenerator() {
           <CodeBlock
             code={result.code}
             disabled={isLoading}
+            isPro={isPro}
+            onDownloadJsx={handleDownloadJsx}
             className={cn('transition-opacity', isLoading && !result.code && 'opacity-40')}
           />
           {isLoading && !result.code && (
