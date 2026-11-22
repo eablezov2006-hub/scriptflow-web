@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Check, Clipboard } from 'lucide-react'
+import { Check, Clipboard, Crown, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -60,8 +60,21 @@ function copyWithFallback(text: string) {
   return ok
 }
 
-export function CodeBlock({ code, className, disabled }: { code: string; className?: string; disabled?: boolean }) {
+export function CodeBlock({
+  code,
+  className,
+  disabled,
+  isPro,
+  onDownloadJsx,
+}: {
+  code: string
+  className?: string
+  disabled?: boolean
+  isPro?: boolean
+  onDownloadJsx?: () => void
+}) {
   const [copied, setCopied] = useState(false)
+  const [downloaded, setDownloaded] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
   const lines = code.split('\n')
 
@@ -75,7 +88,6 @@ export function CodeBlock({ code, className, disabled }: { code: string; classNa
       await navigator.clipboard.writeText(code)
       ok = true
     } catch {
-      // Clipboard API is blocked inside some iframes (e.g. previews), so fall back to execCommand.
       ok = copyWithFallback(code)
     }
     if (!ok) return
@@ -84,26 +96,67 @@ export function CodeBlock({ code, className, disabled }: { code: string; classNa
     timeoutRef.current = setTimeout(() => setCopied(false), 2000)
   }
 
+  function handleJsxClick() {
+    if (!onDownloadJsx) return
+    onDownloadJsx()
+    if (isPro) {
+      setDownloaded(true)
+      setTimeout(() => setDownloaded(false), 2000)
+    }
+  }
+
   return (
     <div className={cn('overflow-hidden rounded-xl border border-border bg-code', className)}>
-      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2">
         <div className="flex items-center gap-1.5" aria-hidden="true">
           <span className="size-2.5 rounded-full bg-foreground/15" />
           <span className="size-2.5 rounded-full bg-foreground/15" />
           <span className="size-2.5 rounded-full bg-foreground/15" />
           <span className="ml-2 font-mono text-xs text-muted-foreground">expression.js</span>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleCopy}
-          disabled={disabled || !code}
-          aria-live="polite"
-          className={cn(copied && 'border-cyan/40 text-cyan')}
-        >
-          {copied ? <Check aria-hidden="true" /> : <Clipboard aria-hidden="true" />}
-          {copied ? 'Copied!' : 'Copy Code'}
-        </Button>
+        <div className="flex items-center gap-2">
+          {onDownloadJsx && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleJsxClick}
+              disabled={disabled || !code}
+              className={cn(
+                'gap-1.5 transition-colors',
+                isPro
+                  ? 'border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20'
+                  : 'border-primary/40 bg-primary/10 text-foreground hover:bg-primary/20'
+              )}
+            >
+              {downloaded ? (
+                <Check className="size-3.5" aria-hidden="true" />
+              ) : isPro ? (
+                <Download className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Crown className="size-3.5 text-cyan" aria-hidden="true" />
+              )}
+              <span>{downloaded ? 'Saved .jsx!' : 'Download .jsx'}</span>
+              {!isPro && (
+                <span className="rounded bg-gradient-to-r from-primary to-cyan px-1.5 py-0.2 text-[10px] font-bold text-primary-foreground">
+                  PRO
+                </span>
+              )}
+            </Button>
+          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+            disabled={disabled || !code}
+            aria-live="polite"
+            className={cn(copied && 'border-cyan/40 text-cyan')}
+          >
+            {copied ? <Check aria-hidden="true" /> : <Clipboard aria-hidden="true" />}
+            {copied ? 'Copied!' : 'Copy Code'}
+          </Button>
+        </div>
       </div>
       <pre className="max-h-[420px] overflow-auto py-4 font-mono text-[13px] leading-6">
         <code>
