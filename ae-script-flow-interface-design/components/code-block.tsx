@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Check, Clipboard, Crown, Download } from 'lucide-react'
+import { Check, Clipboard, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -64,13 +64,11 @@ export function CodeBlock({
   code,
   className,
   disabled,
-  isPro,
   onDownloadJsx,
 }: {
   code: string
   className?: string
   disabled?: boolean
-  isPro?: boolean
   onDownloadJsx?: () => void
 }) {
   const [copied, setCopied] = useState(false)
@@ -99,10 +97,8 @@ export function CodeBlock({
   function handleJsxClick() {
     if (!onDownloadJsx) return
     onDownloadJsx()
-    if (isPro) {
-      setDownloaded(true)
-      setTimeout(() => setDownloaded(false), 2000)
-    }
+    setDownloaded(true)
+    setTimeout(() => setDownloaded(false), 2000)
   }
 
   return (
@@ -122,26 +118,14 @@ export function CodeBlock({
               size="sm"
               onClick={handleJsxClick}
               disabled={disabled || !code}
-              className={cn(
-                'gap-1.5 transition-colors',
-                isPro
-                  ? 'border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20'
-                  : 'border-primary/40 bg-primary/10 text-foreground hover:bg-primary/20'
-              )}
+              className="gap-1.5 border-cyan/40 bg-cyan/10 text-cyan transition-colors hover:bg-cyan/20"
             >
               {downloaded ? (
                 <Check className="size-3.5" aria-hidden="true" />
-              ) : isPro ? (
-                <Download className="size-3.5" aria-hidden="true" />
               ) : (
-                <Crown className="size-3.5 text-cyan" aria-hidden="true" />
+                <Download className="size-3.5" aria-hidden="true" />
               )}
               <span>{downloaded ? 'Saved .jsx!' : 'Download .jsx'}</span>
-              {!isPro && (
-                <span className="rounded bg-gradient-to-r from-primary to-cyan px-1.5 py-0.2 text-[10px] font-bold text-primary-foreground">
-                  PRO
-                </span>
-              )}
             </Button>
           )}
           <Button
