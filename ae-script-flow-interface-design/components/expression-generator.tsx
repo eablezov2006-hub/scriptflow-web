@@ -44,10 +44,6 @@ export function ExpressionGenerator() {
   }
 
   function handleDownloadJsx() {
-    if (!isPro) {
-      openPricing('upgrade')
-      return
-    }
     const jsxContent = buildAfterEffectsJsx(result)
     const blob = new Blob([jsxContent], { type: 'application/javascript;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -217,7 +213,6 @@ export function ExpressionGenerator() {
           <CodeBlock
             code={result.code}
             disabled={isLoading}
-            isPro={isPro}
             onDownloadJsx={handleDownloadJsx}
             className={cn('transition-opacity', isLoading && !result.code && 'opacity-40')}
           />
